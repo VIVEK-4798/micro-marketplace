@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
-import { useDebounce } from '../hooks/useDebounce';
+
 
 const Home = () => {
   const { token, user, setUser } = useContext(AuthContext);
@@ -34,31 +34,31 @@ const Home = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await axios.get('/products', {
-        params: { 
-          page, 
-          limit: 6, 
-          search: debouncedSearch 
+        params: {
+          page,
+          limit: 6,
+          search: debouncedSearch
         },
       });
-      
+
       const data = response.data;
-      
+
       // Mark favorites efficiently using Set
       const productsWithFavorites = data.products.map((product) => ({
         ...product,
         isFavorite: userFavorites.has(product._id),
       }));
-      
+
       setProducts(productsWithFavorites);
       setTotalPages(data.totalPages);
       setTotalProducts(data.totalProducts || 0);
     } catch (err) {
       console.error('Error fetching products:', err);
       setError(
-        err.response?.status === 404 
-          ? 'No products found' 
+        err.response?.status === 404
+          ? 'No products found'
           : 'Failed to load products. Please try again.'
       );
       setProducts([]);
@@ -80,13 +80,13 @@ const Home = () => {
     if (!product) return;
 
     const wasFavorited = product.isFavorite;
-    
+
     // Add to loading set
     setFavoriteLoading(prev => new Set(prev).add(id));
 
     // Optimistic UI update
-    setProducts(prev => 
-      prev.map(p => 
+    setProducts(prev =>
+      prev.map(p =>
         p._id === id ? { ...p, isFavorite: !wasFavorited } : p
       )
     );
@@ -110,14 +110,14 @@ const Home = () => {
       }
     } catch (err) {
       console.error('Favorite error:', err);
-      
+
       // Revert optimistic updates
-      setProducts(prev => 
-        prev.map(p => 
+      setProducts(prev =>
+        prev.map(p =>
           p._id === id ? { ...p, isFavorite: wasFavorited } : p
         )
       );
-      
+
       if (user) {
         setUser(prev => {
           if (!prev) return prev;
