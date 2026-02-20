@@ -139,10 +139,10 @@ const Register = () => {
             }
             break;
           case 409:
-            setErrors({ email: 'An account with this email already exists' });
+            setErrors({ email: 'An account with this email already exists'});
             break;
           default:
-            setErrors({ form: 'Registration failed. Please try again.' });
+            setErrors({ form: 'Registration failed. Please try again.'});
         }
       } else if (err.request) {
         setErrors({ form: 'Cannot connect to server. Please check your internet connection.' });
