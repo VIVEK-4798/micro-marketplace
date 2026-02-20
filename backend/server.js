@@ -21,7 +21,14 @@ app.use(express.urlencoded({ extended: false }));
 
 // Enable CORS
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://localhost:5176',
+    // Add Vercel frontend URL: 'https://your-frontend.vercel.app'
+  ],
   credentials: true,
 }));
 

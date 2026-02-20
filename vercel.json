@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd web && npm run build",
+  "outputDirectory": "web/dist",
+  "framework": "vite",
+  "env": {
+    "VITE_API_URL": {
+      "description": "API URL for the backend",
+      "required": false
+    }
+  }
+}
