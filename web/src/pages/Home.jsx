@@ -17,15 +17,12 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [favoriteLoading, setFavoriteLoading] = useState(new Set());
 
-  // Debounce search to avoid too many API calls
-  const debouncedSearch = useDebounce(search, 500);
+  const debouncedSearch = useDebounce(search, 500); // ✅ using external hook
 
-  // Reset page when search changes
   useEffect(() => {
     setPage(1);
   }, [debouncedSearch]);
 
-  // Memoize favorites set for quick lookup
   const userFavorites = useMemo(() => {
     return user?.favorites ? new Set(user.favorites) : new Set();
   }, [user?.favorites]);
@@ -45,7 +42,6 @@ const Home = () => {
 
       const data = response.data;
 
-      // Mark favorites efficiently using Set
       const productsWithFavorites = data.products.map((product) => ({
         ...product,
         isFavorite: userFavorites.has(product._id),
@@ -72,26 +68,21 @@ const Home = () => {
   }, [fetchProducts]);
 
   const handleFavorite = useCallback(async (id) => {
-    // Prevent multiple clicks on same product
     if (favoriteLoading.has(id)) return;
 
-    // Find the product to get current state
     const product = products.find(p => p._id === id);
     if (!product) return;
 
     const wasFavorited = product.isFavorite;
 
-    // Add to loading set
     setFavoriteLoading(prev => new Set(prev).add(id));
 
-    // Optimistic UI update
     setProducts(prev =>
       prev.map(p =>
         p._id === id ? { ...p, isFavorite: !wasFavorited } : p
       )
     );
 
-    // Optimistic user update
     if (user) {
       setUser(prev => {
         if (!prev) return prev;
@@ -109,29 +100,12 @@ const Home = () => {
         await axios.delete(`/products/${id}/favorite`);
       }
     } catch (err) {
-      console.error('Favorite error:', err);
-
-      // Revert optimistic updates
       setProducts(prev =>
         prev.map(p =>
           p._id === id ? { ...p, isFavorite: wasFavorited } : p
         )
       );
-
-      if (user) {
-        setUser(prev => {
-          if (!prev) return prev;
-          const newFavorites = wasFavorited
-            ? [...prev.favorites, id]
-            : prev.favorites.filter(favId => favId !== id);
-          return { ...prev, favorites: newFavorites };
-        });
-      }
-
-      // Show error notification
-      alert('Failed to update favorite. Please try again.');
     } finally {
-      // Remove from loading set
       setFavoriteLoading(prev => {
         const newSet = new Set(prev);
         newSet.delete(id);
