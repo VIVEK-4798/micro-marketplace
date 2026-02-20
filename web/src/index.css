@@ -1,0 +1,12 @@
+/* basic reset and typography */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fafafa;
+  color: #333;
+  min-height: 100vh;
+}
+a { color: #4f46e5; text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: inherit; }

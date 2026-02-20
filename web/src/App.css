@@ -1,0 +1,13 @@
+/* reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fafafa;
+  color: #333;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* spinner animation */
+@keyframes spin { to { transform: rotate(360deg); } }
