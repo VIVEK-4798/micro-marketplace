@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import ProductCard from '../components/ProductCard';
 import Pagination from '../components/Pagination';
 import Loader from '../components/Loader';
-
+import useDebounce from '../hooks/useDebounce';
 
 const Home = () => {
   const { token, user, setUser } = useContext(AuthContext);
@@ -411,23 +411,6 @@ const styles = {
     color: '#999',
     marginTop: '20px',
   },
-};
-
-// Custom hook for debouncing
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
 };
 
 export default Home;
